@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+</head>
+<body ng-app="shoppingcart" ng-controller="shoppingCTR">
+<div class=" container">
+    <div class="row">
+
+        <div ng-repeat="product in products" class="col-sm-4">
+            <h3 >{{product.p_name}}</h3> <br>
+           <img ng-src="{{product.p_image}}" alt="" height="300px" width="200px">        
+             <h3 class="text-primary">{{product.p_price | currency}}</h3>         
+          <button ng-click ="add_cart(product)">ADD TO CART</button>
+        </div>
+        
+    </div> <br><br>
+    <table class="table table-stripped table-bordered">
+        <thead>
+            <tr>
+                <th>SL.NO</th>
+                <th>PRODUCT</th>
+                <th>PRICE</th>
+                <th class="btn btn-danger bg-danger col-sm-12 ">Remove</th>
+            </tr>
+        </thead>
+            <tbody>
+                <tr ng-repeat="cart in carts" ng-init ="setTotals(cart)">
+                    <td>{{$index + 1}}</td>
+                    <td>{{cart.p_name}}</td>
+                    <td>{{cart.p_price}}</td>
+                
+                    <td class="btn btn-danger bg-danger col-sm-12" ng-click ="remove_cart(cart)"> X</td>
+                </tr>
+                <tr>
+                    <td align="right">TOTAL</td>
+                    <td>{{total | currency}}</td>
+                    <td></td>
+                </tr>
+            </tbody>
+            
+            
+        
+    </table>
+</div>
+
+
+
+    
+<script>
+    var app = angular.module("shoppingcart",[])
+    app.controller("shoppingCTR", function($scope){
+    $scope.carts=[];
+    
+     $scope.total = 0;
+    
+
+    $scope.products = [
+        {p_id: "1", p_name: 'Iphone13',p_image:'./images/smart.png', p_price: 679},
+        {p_id: "2", p_name: 'Iphone14', p_image:'images/iphone13.jpeg', p_price: 899},
+        {p_id: "3", p_name: 'Iphone14 pro', p_image:'./images/iphone14pro.jpg',p_price:1099}    
+    ];
+
+    $scope.add_cart = function(product){
+            if(product){
+                $scope.carts.push({
+                    p_name:product.p_name,
+                    p_image:product.p_image,
+                    p_price:product.p_price
+                });
+            }
+        }
+   
+    $scope.setTotals = function(cart){
+        if(cart){
+            $scope.total += cart.p_price;
+        }
+    }
+
+    $scope.remove_cart = function(cart){
+        if(cart){
+            $scope.carts.splice($scope.carts.indexOf(cart), 1);
+            $scope.total -= cart.p_price;
+        }
+    }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+</body>
+</html>
